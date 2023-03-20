@@ -6,6 +6,7 @@ import AuthPage from "./pages/Auth";
 import WelcomePage from "./pages/Welcome";
 import UpdatProfilePage, {loader as profileInfoLoader} from "./pages/UpdateProfile";
 import ErrorPage from "./pages/Error";
+import PasswordChangePage from "./pages/PasswordChange";
 
 function App() {
 
@@ -13,7 +14,8 @@ function App() {
     {path:'/', element:<RootLayout/>, errorElement:<ErrorPage/>, children:[
       {index: true , element:<AuthPage/>},
       {path:'welcome',element:<WelcomePage/>},
-      {path:'updateProfile',element:<UpdatProfilePage/>,loader:profileInfoLoader}
+      {path:'updateProfile',element:<UpdatProfilePage/>,loader:profileInfoLoader},
+      {path:'forgot', element:<PasswordChangePage/>}
     ]}
   ])
   return (
