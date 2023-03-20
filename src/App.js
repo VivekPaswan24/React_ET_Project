@@ -1,12 +1,21 @@
 import React from "react";
-import AuthForm from "./components/Auth/AuthForm";
-import MainNavigation from "./components/Header/MainNavigation";
+
+import {createBrowserRouter,RouterProvider} from 'react-router-dom'
+import RootLayout from "./pages/Root";
+import AuthPage from "./pages/Auth";
+import WelcomePage from "./pages/Welcome";
 
 function App() {
+
+  const router=createBrowserRouter([
+    {path:'/', element:<RootLayout/>,children:[
+      {index: true , element:<AuthPage/>},
+      {path:'welcome',element:<WelcomePage/>}
+    ]}
+  ])
   return (
     <>
-    <MainNavigation/>
-    <AuthForm/>
+    <RouterProvider router={router}/>
     </>
   );
 }
