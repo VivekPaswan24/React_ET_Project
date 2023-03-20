@@ -4,7 +4,7 @@ import {createBrowserRouter,RouterProvider} from 'react-router-dom'
 import RootLayout from "./pages/Root";
 import AuthPage from "./pages/Auth";
 import WelcomePage from "./pages/Welcome";
-import UpdatProfilePage from "./pages/UpdateProfile";
+import UpdatProfilePage, {loader as profileInfoLoader} from "./pages/UpdateProfile";
 
 function App() {
 
@@ -12,7 +12,7 @@ function App() {
     {path:'/', element:<RootLayout/>,children:[
       {index: true , element:<AuthPage/>},
       {path:'welcome',element:<WelcomePage/>},
-      {path:'updateProfile',element:<UpdatProfilePage/>}
+      {path:'updateProfile',element:<UpdatProfilePage/>,loader:profileInfoLoader}
     ]}
   ])
   return (

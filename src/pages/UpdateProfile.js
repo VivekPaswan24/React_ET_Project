@@ -1,11 +1,18 @@
 import axios from "axios";
 import React, { useRef } from "react";
 import { Container, Form, Button, Row, Col } from "react-bootstrap";
+import { useLoaderData } from "react-router-dom";
 
 const UpdatProfilePage = () => {
 
+    const data=useLoaderData()
+
+    const fullName=data[0].displayName
+    const photoUrl=data[0].photoUrl
+
     const nameInputRef=useRef();
     const photoInputRef=useRef();
+
 
     const updateProfileHandler=async(event)=>{
         event.preventDefault()
@@ -34,7 +41,7 @@ const UpdatProfilePage = () => {
             Full Name
           </Form.Label>
           <Col sm="10">
-            <Form.Control type="text" placeholder="Full Name" ref={nameInputRef} required/>
+            <Form.Control type="text" ref={nameInputRef} defaultValue={fullName ? fullName:''} required/>
           </Col>
         </Form.Group>
 
@@ -43,7 +50,7 @@ const UpdatProfilePage = () => {
             Profile Photo URL
           </Form.Label>
           <Col sm="10">
-            <Form.Control type="text" placeholder="Profile Photo URL" ref={photoInputRef} required />
+            <Form.Control type="text" ref={photoInputRef}  defaultValue={photoUrl ? photoUrl:''} required />
           </Col>
         </Form.Group>
         <Button type="submit">Update</Button>
@@ -53,3 +60,17 @@ const UpdatProfilePage = () => {
 };
 
 export default UpdatProfilePage;
+
+
+export async function loader(){
+    const token=localStorage.getItem('token')
+    try{
+        const response=await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyD4GjTK67EiRG4F6h_wEsd1uUdZeP_sYvw',{
+            idToken:token
+        })
+        return response.data.users
+    }catch(error){
+        console.log(error)
+        
+    }
+}
