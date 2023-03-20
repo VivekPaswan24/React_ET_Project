@@ -5,11 +5,12 @@ import RootLayout from "./pages/Root";
 import AuthPage from "./pages/Auth";
 import WelcomePage from "./pages/Welcome";
 import UpdatProfilePage, {loader as profileInfoLoader} from "./pages/UpdateProfile";
+import ErrorPage from "./pages/Error";
 
 function App() {
 
   const router=createBrowserRouter([
-    {path:'/', element:<RootLayout/>,children:[
+    {path:'/', element:<RootLayout/>, errorElement:<ErrorPage/>, children:[
       {index: true , element:<AuthPage/>},
       {path:'welcome',element:<WelcomePage/>},
       {path:'updateProfile',element:<UpdatProfilePage/>,loader:profileInfoLoader}

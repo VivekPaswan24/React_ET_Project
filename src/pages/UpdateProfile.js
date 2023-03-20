@@ -65,12 +65,13 @@ export default UpdatProfilePage;
 export async function loader(){
     const token=localStorage.getItem('token')
     try{
-        const response=await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyD4GjTK67EiRG4F6h_wEsd1uUdZeP_sYvw',{
+        const response=await axios.post('shttps://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyD4GjTK67EiRG4F6h_wEsd1uUdZeP_sYvw',{
             idToken:token
         })
         return response.data.users
     }catch(error){
-        console.log(error)
+        console.log(error.response.data.error.message)
+        throw Error('Could not fetch data.')
         
     }
 }
