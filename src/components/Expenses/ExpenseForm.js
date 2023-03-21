@@ -1,8 +1,10 @@
-import React, { useContext, useRef } from "react";
-import { Button, Form, InputGroup } from "react-bootstrap";
+import React, { useContext, useRef, useState } from "react";
+import { Button, Container, Form, InputGroup } from "react-bootstrap";
 import ExpenseContext from "../../store/expense-context";
+import ExpenseList from "./ExpenseList";
 
-const ExpenseForm = () => {
+const ExpenseForm = (props) => {
+  const [isEdit,setIsEdit]=useState(null)
   const desInputRef=useRef();
   const amountInputRef=useRef();
   const catInputRef=useRef();
@@ -22,36 +24,50 @@ const ExpenseForm = () => {
       category:enteredCat
     }
 
-    expenseCtx.addExpense(expenseDetails);
+    expenseCtx.addExpense(expenseDetails,isEdit);
+    setIsEdit(null)
 
   }
 
+  const editExpenseHandler=(expense)=>{
+    console.log(expense)
+    amountInputRef.current.value=expense.amount;
+    desInputRef.current.value=expense.description;
+    catInputRef.current.value=expense.category;
+    setIsEdit(expense.id)
+  }
+
   return (
-    <Form onSubmit={submitHandler}>
-      <Form.Group className="mt-3">
-        <Form.Label>Expense Amount</Form.Label>
-        <InputGroup className="mb-3">
-          <InputGroup.Text>Rs</InputGroup.Text>
-          <Form.Control type="number" ref={amountInputRef} />
-          <InputGroup.Text>.00</InputGroup.Text>
-        </InputGroup>
-      </Form.Group>
-      <Form.Group className="mb-3">
-        <Form.Label>Description</Form.Label>
-        <Form.Control type="text" placeholder="Description" ref={desInputRef} />
-      </Form.Group>
-      <Form.Select className="mb-3" ref={catInputRef}>
-        <option>Choose Category</option>
-        <option value="Food">Food</option>
-        <option value="Petrol">Petrol</option>
-        <option value="Salary">Salary</option>
-      </Form.Select>
-      <div className="d-grid gap-2">
-      <Button  type="submit" variant="primary" size="lg">
-        Add Expense
-      </Button>
-    </div>
-    </Form>
+    <Container>
+
+      <Form onSubmit={submitHandler}>
+        <Form.Group className="mt-3">
+          <Form.Label>Expense Amount</Form.Label>
+          <InputGroup className="mb-3">
+            <InputGroup.Text>Rs</InputGroup.Text>
+            <Form.Control type="number" ref={amountInputRef} />
+            <InputGroup.Text>.00</InputGroup.Text>
+          </InputGroup>
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Description</Form.Label>
+          <Form.Control type="text" placeholder="Description" ref={desInputRef} />
+        </Form.Group>
+        <Form.Select className="mb-3" ref={catInputRef}>
+          <option>Choose Category</option>
+          <option value="Food">Food</option>
+          <option value="Petrol">Petrol</option>
+          <option value="Salary">Salary</option>
+        </Form.Select>
+        <div className="d-grid gap-2">
+        <Button  type="submit" variant="primary" size="lg">
+          {!isEdit ? "Add Expense" : "Edit Expense"}
+        </Button>
+      </div>
+      </Form>
+      <ExpenseList onClick={editExpenseHandler}/>
+    </Container>
+    
   );
 };
 

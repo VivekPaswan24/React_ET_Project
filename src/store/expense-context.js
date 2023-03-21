@@ -4,7 +4,9 @@ import React, { useEffect, useState } from "react";
 const ExpenseContext = React.createContext({
   expenses: [],
   totalAmount: 0,
-  addExpense: () => {},
+  addExpense: (expense) => {},
+  removeExpense:(id)=>{},
+  editExpense:(id)=>{}
 });
 
 export default ExpenseContext;
@@ -35,25 +37,66 @@ export const ExpenseProvider = (props) => {
     getData();
   },[])
 
-  const addExpenseHandler = async(expense) => {
+  const addExpenseHandler = async(expense,id) => {
+    if(id){
+      try{
+        await axios.put(`https://expensetrackerdata-591b9-default-rtdb.firebaseio.com/expenses/${id}.json`,{expense})
+        setExpenses((prevState)=>{
+          const existingExpenseIndex=prevState.findIndex((ele)=>ele.id===id)
+          const updatedexpenses=[...prevState]
+          const updatedexpense={
+            ...expense,
+            id:id
+          }
+           updatedexpenses[existingExpenseIndex]=updatedexpense
+           return updatedexpenses;
+        })
+      }catch(error){
+        console.log(error)
+      }
+     
+    }else{
+      try{
+        const response=await axios.post("https://expensetrackerdata-591b9-default-rtdb.firebaseio.com/expenses.json",{expense})
+        setExpenses((prevState)=>{
+          const updatedexpenses=prevState.concat({...expense,id:response.data.name});
+          return updatedexpenses;
+        })
+      }catch(error){
+        console.log(error)
+      }
+    }
+    setTotalAmount(0)
+    }
+
+  const removeExpenseHandler=async(id)=>{
     try{
-      await axios.post("https://expensetrackerdata-591b9-default-rtdb.firebaseio.com/expenses.json",{expense})
+      await axios.delete(`https://expensetrackerdata-591b9-default-rtdb.firebaseio.com/expenses/${id}.json`)
       setExpenses((prevState)=>{
-        const updatedexpenses=prevState.concat(expense);
+        const updatedexpenses=prevState.filter((ele)=>ele.id!==id)
         return updatedexpenses;
       })
+      console.log('Expense Successfully Deleted')
     }catch(error){
       console.log(error)
     }
-    setTotalAmount((prevAmount)=>{
-        return prevAmount=prevAmount+expense.amount
-    })
   };
+
+  const editExpenseHandler=async(details)=>{
+
+    try{
+      await axios.put("https://expensetrackerdata-591b9-default-rtdb.firebaseio.com/expenses/id.json")
+    }catch(error){
+      console.log(error)
+    }
+  }
 
   const expenseContext = {
     expenses: expenses,
     totalAmount: totalAmount,
     addExpense: addExpenseHandler,
+    removeExpense:removeExpenseHandler,
+    editExpense:editExpenseHandler,
   };
   return (
     <ExpenseContext.Provider value={expenseContext}>
