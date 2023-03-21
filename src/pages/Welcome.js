@@ -2,6 +2,7 @@ import axios from "axios";
 import React from "react";
 import { Container, Button } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
+import Expenses from "../components/Expenses/Expenses";
 
 import classes from "./Welcome.module.css";
 
@@ -23,13 +24,15 @@ const WelcomePage = () => {
     <>
       <Container fluid className={classes.msg}>
         <p>Welcome to expense tracker!!!</p>
+        <Button variant="outline-success" onClick={varifyEmailHandler} className='mb-3'>Verify Email</Button>
         <p>
           Your profile is incomplete.
           <NavLink to="/updateProfile">Complete Now</NavLink>
         </p>
       </Container>
       <Container className="mt-5">
-        <Button onClick={varifyEmailHandler}>Verify Email</Button>
+        <h2 style={{textAlign:'center'}}>Daily Expenses</h2>
+        <Expenses/>
       </Container>
     </>
   );

@@ -51,6 +51,7 @@ const AuthForm = () => {
             returnSecureToken: true,
           }
         );
+        console.log(response)
         localStorage.setItem("token", response.data.idToken);
         navigate("/welcome");
       } catch (error) {
