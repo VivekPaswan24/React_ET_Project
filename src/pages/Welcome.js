@@ -24,13 +24,13 @@ const WelcomePage = () => {
     <>
       <Container fluid className={classes.msg}>
         <p>Welcome to expense tracker!!!</p>
-        <Button variant="outline-success" onClick={varifyEmailHandler} className='mb-3'>Verify Email</Button>
         <p>
           Your profile is incomplete.
           <NavLink to="/updateProfile">Complete Now</NavLink>
         </p>
       </Container>
       <Container className="mt-5">
+        <Button variant="outline-success" onClick={varifyEmailHandler} className='mb-3'>Verify Email</Button>
         <h2 style={{textAlign:'center'}}>Daily Expenses</h2>
         <Expenses/>
       </Container>
