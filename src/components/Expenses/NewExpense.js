@@ -30,14 +30,14 @@ const NewExpense = (props) => {
   return (
       <ListGroup.Item
         as="li"
-        className="d-flex justify-content-between align-items-start"
+        className="d-flex justify-content-between align-items-start expenseList"
       >
         <div className="ms-2 me-auto">
           <div className="fw-bold">{props.category}</div>
           {props.description}
         </div>
         <div>
-        <div className="fw-bold">{`Amount: ${props.amount} Rs`}</div>
+        <div className="fw-bold">Amount: &#8377;{props.amount}</div>
         <Button variant="outline-dark" size="sm" className="me-3" onClick={editHandler} >Edit</Button>
         <Button variant="outline-danger" size="sm" onClick={deleteHandler}>Delete</Button>
         </div>

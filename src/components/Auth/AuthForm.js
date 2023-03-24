@@ -110,11 +110,11 @@ const AuthForm = () => {
                 />
               </Form.Group>
             )}
-            <div className="d-flex justify-content-center">
-            <Button variant="primary" type="submit">
-              {isLogin ? "Login" : "Sign Up"}
-            </Button>
-            </div>
+            <div className="d-grid gap-2">
+          <Button type="submit" variant="success" size="md">
+            {isLogin ? "Login" : "Sign Up"}
+          </Button>
+        </div>
           </Form>
         </Card.Body>
         {isLogin && <Link to='/forgot' style={{textAlign:'center',textDecoration:'none'}}>Forgot password?</Link>}

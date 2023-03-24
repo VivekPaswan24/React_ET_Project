@@ -5,14 +5,21 @@ import { useEffect } from "react";
 import NewExpense from "./NewExpense";
 import { expenseActions } from "../../store/expense-slice";
 import axios from "axios";
+// import { premiumActions } from "../../store/premium-slice";
 
 const ExpenseList = (props) => {
   const expenses = useSelector((state) => state.expense.expenses);
   const totalAmount = useSelector((state) => state.expense.totalAmount);
-
+  
   const dispatch = useDispatch();
   const email = localStorage.getItem("email");
   const newEmail = email.replace("@", "").replace(".", "").replace(".", "");
+  
+  // if(Number(totalAmount)>=10000){
+  //   dispatch(premiumActions.showPremium(true))
+  // }else{
+  //   dispatch(premiumActions.showPremium(false))
+  // }
 
   useEffect(() => {
     async function getData() {
@@ -48,7 +55,7 @@ const ExpenseList = (props) => {
   }, [dispatch, newEmail]);
 
   return (
-    <Card border="info" className="mt-5">
+    <Card border="info">
       <Card.Header className="d-flex justify-content-between">
         <div>
           <p className="fw-bold">
@@ -56,7 +63,7 @@ const ExpenseList = (props) => {
           </p>
         </div>
         <div>
-          <p className="fw-bold">{`Total Amount: ${totalAmount} Rs`}</p>
+          <p className="fw-bold">Total Amount: &#8377;{totalAmount}</p>
         </div>
       </Card.Header>
 

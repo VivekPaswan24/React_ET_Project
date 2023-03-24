@@ -5,7 +5,7 @@ import ExpenseList from "./ExpenseList";
 import axios from "axios";
 import { expenseActions } from "../../store/expense-slice";
 
-const ExpenseForm = (props) => {
+const ExpenseForm = () => {
   const [isEdit, setIsEdit] = useState(null);
   const desInputRef = useRef();
   const amountInputRef = useRef();
@@ -13,6 +13,7 @@ const ExpenseForm = (props) => {
 
   const dispatch = useDispatch();
   const expenses = useSelector((state) => state.expense.expenses);
+  const totalAmount = useSelector((state) => state.expense.totalAmount);
 
   const submitHandler = async (event) => {
     event.preventDefault();
@@ -46,7 +47,6 @@ const ExpenseForm = (props) => {
         );
         amountInputRef.current.value = "";
         desInputRef.current.value = "";
-        catInputRef.current.value = "";
       } catch (error) {
         console.log(error);
       }
@@ -74,7 +74,6 @@ const ExpenseForm = (props) => {
         );
         amountInputRef.current.value = "";
         desInputRef.current.value = "";
-        catInputRef.current.value = "";
         setIsEdit(null);
       } catch (error) {
         console.log(error);
@@ -90,13 +89,29 @@ const ExpenseForm = (props) => {
     setIsEdit({ id: expense.id, amount: expense.amount });
   };
 
+  const downloadHandler = () => {
+    const headers = Object.keys(expenses[0]).toString();
+
+    const main = expenses.map((item) => {
+      return Object.values(item).toString();
+    });
+    const amount = `Total Amount: ${totalAmount} Rs`;
+    const csv = [headers, ...main, amount].join("\n");
+    const blob = new Blob([csv]);
+    const url = URL.createObjectURL(blob);
+    let a = document.createElement("a");
+    a.download = "expenselist.csv";
+    a.href = url;
+    a.click();
+  };
+
   return (
     <Container>
-      <Form onSubmit={submitHandler}>
+      <Form onSubmit={submitHandler} className='fw-semibold'>
         <Form.Group className="mt-3">
           <Form.Label>Expense Amount</Form.Label>
           <InputGroup className="mb-3">
-            <InputGroup.Text>Rs</InputGroup.Text>
+            <InputGroup.Text>&#8377;</InputGroup.Text>
             <Form.Control type="number" ref={amountInputRef} />
             <InputGroup.Text>.00</InputGroup.Text>
           </InputGroup>
@@ -114,13 +129,22 @@ const ExpenseForm = (props) => {
           <option value="Food">Food</option>
           <option value="Petrol">Petrol</option>
           <option value="Salary">Salary</option>
+          <option value="Furniture">Furniture</option>
+          <option value="Kitchen">Kitchen</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Others">Others</option>
         </Form.Select>
         <div className="d-grid gap-2">
-          <Button type="submit" variant="primary" size="lg">
+          <Button type="submit" variant="outline-warning" size="lg">
             {!isEdit ? "Add Expense" : "Edit Expense"}
           </Button>
         </div>
       </Form>
+      <div className="d-flex justify-content-center my-5">
+        <Button variant="outline-info" onClick={downloadHandler}>
+          Download Expense List
+        </Button>
+      </div>
       <ExpenseList onClick={editExpenseHandler} />
     </Container>
   );

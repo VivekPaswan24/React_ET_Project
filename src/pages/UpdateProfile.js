@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Container, Form, Button, Row, Col } from "react-bootstrap";
 
 import { useSelector } from "react-redux";
@@ -7,10 +7,9 @@ import { useSelector } from "react-redux";
 const UpdatProfilePage = () => {
   const token=useSelector(state=>state.auth.idToken);
 
-  // const data=useLoaderData()
+ const [fullName,setFullName]=useState('');
+ const [photoUrl,setPhotoUrl]=useState('')
   
-  let fullName=''
-  let photoUrl=''
   
   const nameInputRef=useRef();
   const photoInputRef=useRef();
@@ -21,7 +20,8 @@ const UpdatProfilePage = () => {
         const response=await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyD4GjTK67EiRG4F6h_wEsd1uUdZeP_sYvw',{
             idToken:token
         })
-       console.log(response)
+       setFullName(response.data.users[0].displayName)
+       setPhotoUrl(response.data.users[0].photoUrl)
     }catch(error){
         console.log(error.response.data.error.message)
     }
