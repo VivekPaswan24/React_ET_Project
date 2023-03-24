@@ -1,12 +1,19 @@
 import React, { useRef, useState } from "react";
+
 import { Card, Button, Form, Container } from "react-bootstrap";
+
 import axios from "axios";
 
 import { useNavigate,Link } from "react-router-dom";
 
+import { useDispatch } from "react-redux";
+import { authActions } from "../../store/auth-slice";
+
 const AuthForm = () => {
   const [error, setError] = useState(null);
   const [isLogin, setIsLogin] = useState(true);
+
+  const dispatch=useDispatch();
 
   const navigate = useNavigate();
 
@@ -52,7 +59,9 @@ const AuthForm = () => {
           }
         );
         console.log(response)
+        dispatch(authActions.login(response.data.idToken))
         localStorage.setItem("token", response.data.idToken);
+        localStorage.setItem('email',response.data.email)
         navigate("/welcome");
       } catch (error) {
         setError(error.response.data.error.message);
@@ -101,12 +110,14 @@ const AuthForm = () => {
                 />
               </Form.Group>
             )}
+            <div className="d-flex justify-content-center">
             <Button variant="primary" type="submit">
               {isLogin ? "Login" : "Sign Up"}
             </Button>
+            </div>
           </Form>
         </Card.Body>
-        <Link to='/forgot' style={{textAlign:'center',textDecoration:'none'}}>Forgot password?</Link>
+        {isLogin && <Link to='/forgot' style={{textAlign:'center',textDecoration:'none'}}>Forgot password?</Link>}
       </Card>
       <Container
         style={{

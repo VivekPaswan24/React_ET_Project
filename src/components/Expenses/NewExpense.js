@@ -1,16 +1,31 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Button, ListGroup } from "react-bootstrap";
-import ExpenseContext from "../../store/expense-context";
+import { useDispatch, useSelector } from "react-redux";
+import { expenseActions } from "../../store/expense-slice";
+import axios from "axios";
 
 const NewExpense = (props) => {
 
-const expenseCtx=useContext(ExpenseContext)
+  const expenses=useSelector(state=>state.expense.expenses)
+  const dispatch=useDispatch();
+
   const editHandler=()=>{
     props.onClick(props)
   }
 
-  const deleteHandler=()=>{
-    expenseCtx.removeExpense(props.id)
+  const deleteHandler=async()=>{
+    const id=props.id
+    const email=localStorage.getItem('email')
+    const newEmail=email.replace('@','').replace('.','').replace('.','')
+    try{
+      await axios.delete(`https://expensetrackerdata-591b9-default-rtdb.firebaseio.com/${newEmail}/${id}.json`)
+        const updatedexpenses=expenses.filter((ele)=>ele.id!==id)
+        dispatch(expenseActions.removeExpense({expenses:updatedexpenses,amount:props.amount}))
+      console.log('Expense Successfully Deleted')
+    }catch(error){
+      console.log(error)
+    }
+
   }
   return (
       <ListGroup.Item
